@@ -1,5 +1,6 @@
 package com.example.fluxdemo.handler;
 
+import com.example.fluxdemo.dto.HelloMessage;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -14,7 +15,11 @@ import reactor.core.publisher.Mono;
 public class HelloHandler {
 
     public Mono<ServerResponse> hello(ServerRequest request) {
-        return ServerResponse.ok().contentType(MediaType.TEXT_PLAIN)
-                .body(BodyInserters.fromValue("Hello, Spring!"));
+
+        String name = request.queryParam("name").get();
+        String message = "hello " + name;
+
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(new HelloMessage(name, message)));
     }
 }
